@@ -1,6 +1,8 @@
    
 import PropTypes from 'prop-types';
 import styles from './filter.module.css';
+import { changeFilter } from '../../redux/contacts/contacts-actions';
+import { connect } from 'react-redux';
 
 const Filter = ({ value, onChange }) => {
   return (
@@ -21,4 +23,12 @@ Filter.propTypes = {
   onChange: PropTypes.func.isRequired,
 };
 
-export default Filter;
+const mstp = state => ({
+	value: state.contacts.filter,
+});
+
+const mdtp = dispatch => ({
+	onFilterInput: e => dispatch(changeFilter(e.target.value)),
+});
+
+export default connect(mstp, mdtp)(Filter);
