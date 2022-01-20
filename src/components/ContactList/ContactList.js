@@ -1,37 +1,41 @@
-import PropTypes from "prop-types";
-import s from './contactList.module.css';
+import PropTypes from 'prop-types';
+
 import { connect } from 'react-redux';
-import { deleteContact } from '../../redux/contacts/contacts-actions';
+import { deleteContact } from '../../redux/contacts/contacts.actions';
+import s from './contactList.module.css'
 
+const ContactList = ({ contacts, onDeleteClick }) => (
+	<>
+		<h1>Contacts</h1>
+		{contacts.length ? (
+			<ul className={s.list}>
+				{contacts.map(({ id, name, phone }) => (
+					<li className={s.item} key={id}>
+						{name}: {phone}
+						<button className={s.btn} onClick={() => onDeleteClick(id)}>
+						</button>
+					</li>
+				))}
+			</ul>
+		) : (
+			<p>There are no contacts yet...</p>
+		)}
+	</>
+);
 
-const ContactList = ({ contacts, onDeleteContact }) => {
-  return (
-    <ul className={s.list}>
-      {contacts.map(({ id, name, number }) => (
-        <li className={s.item} key={id}>
-          <p className={s.info}>
-            {name}: {number}
-          </p>
-          <button
-            className={s.btn}
-            type="button"
-            onClick={() => onDeleteContact(id)}
-          />
-        </li>
-      ))}
-    </ul>
-  );
-}
+ContactList.defaultProps = {
+	contacts: [],
+};
 
 ContactList.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-    }),
-  ),
-  onDeleteContact: PropTypes.func.isRequired,
+	contacts: PropTypes.arrayOf(
+		PropTypes.shape({
+			id: PropTypes.string.isRequired,
+			name: PropTypes.string.isRequired,
+			phone: PropTypes.string.isRequired,
+		}),
+	),
+	onDeleteClick: PropTypes.func.isRequired,
 };
 
 const getContacts = (allContacts, filter) => {
@@ -49,7 +53,7 @@ const mstp = ({ contacts: { items, filter } }) => ({
 });
 
 const mdtp = dispatch => ({
-	onDeleteContact: id => dispatch(deleteContact(id)),
+	onDeleteClick: id => dispatch(deleteContact(id)),
 });
 
 export default connect(mstp, mdtp)(ContactList);

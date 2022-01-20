@@ -1,26 +1,22 @@
-   
-import PropTypes from 'prop-types';
-import styles from './filter.module.css';
-import { changeFilter } from '../../redux/contacts/contacts-actions';
+import shortid from 'shortid';
 import { connect } from 'react-redux';
+import { changeFilter } from '../../redux/contacts/contacts.actions';
+import styles from './filter.module.css'
 
-const Filter = ({ value, onChange }) => {
+const Filter = ({ value, onFilterInput }) => {
+	const inputFilterId = shortid.generate();
   return (
-    <label className={styles.label}>
+    <label className={styles.label} htmlFor={inputFilterId}>
       Find contacts by name
       <input
+        id={inputFilterId}
         className={styles.input}
         type="text"
         value={value}
-        onChange={onChange}
+        onChange={onFilterInput}
       />
     </label>
-  );
-}
-
-Filter.propTypes = {
-  value: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
+	);
 };
 
 const mstp = state => ({
